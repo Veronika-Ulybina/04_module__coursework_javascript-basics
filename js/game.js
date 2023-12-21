@@ -7,32 +7,30 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  const game = (language) => {
-    let lang;
-    try {
-      lang = Intl.DisplayNames(['en'], {
-        type: language}).of(language).slice(0, 2).toLowerCase();
-    } catch (err) {
-      lang = 'ru';
-    }
+  const game = (language = 'ru') => {
+    const lang = language.toLowerCase() === 'en' ||
+      language.toLowerCase() === 'eng' ? 'en' : 'ru';
 
     const result = {
       player: 5,
       bot: 5,
+      playerGlasses: 0,
+      botGlasses: 0,
     };
 
     const languages = {
       ru: {
         figures: {
-          'paper': 'камень',
-          'rock': 'ножницы',
-          'scissors': 'бумага',
+          'бумага': 'камень',
+          'камень': 'ножницы',
+          'ножницы': 'бумага',
         },
         isGoOut: 'Вы точно хотите покинуть игру?',
         isContinue: 'Сыграем еще разок?',
-        result: 'Результат',
+        score: 'Счет',
         bot: 'Бот',
         you: 'Вы',
+        player: 'Игрок',
         draw: 'Ничья',
         youWon: 'Вы выйграли',
         botWon: 'Бот выйграл',
@@ -47,15 +45,16 @@
       },
       en: {
         figures: {
-          'rock': 'scissors',
-          'scissors': 'paper',
-          'paper': 'rock',
+          rock: 'scissors',
+          scissors: 'paper',
+          paper: 'rock',
         },
         isGoOut: 'Are you sure you want to leave the game?',
         isContinue: 'Shall we play again?',
-        result: 'Result',
+        score: 'Score',
         bot: 'Bot',
         you: 'You',
+        player: 'Player',
         draw: 'Draw',
         youWon: 'You won',
         botWon: 'Bot won',
@@ -94,6 +93,10 @@
         const isGoOut = confirm(languages[lang].isGoOut);
 
         if (isGoOut) {
+          alert(`
+        ${languages[lang].score}:
+          ${languages[lang].bot} ${result.botGlasses}
+          ${languages[lang].player} ${result.playerGlasses}`);
           return;
         } else {
           return start();
@@ -111,9 +114,9 @@
         if (x === y) {
           resOfGame = languages[lang].draw;
           alert(`
-        ${languages[lang].bot}: ${bot}
-        ${languages[lang].you}: ${playerNum}
-        ${resOfGame}`);
+          ${languages[lang].bot}: ${bot}
+          ${languages[lang].you}: ${playerNum}
+            ${resOfGame}`);
           return start();
         }
 
@@ -146,6 +149,10 @@
           const isGoOut = confirm(languages[lang].isGoOut);
 
           if (isGoOut) {
+            alert(`
+            ${languages[lang].score}:
+              ${languages[lang].bot} ${result.botGlasses}
+              ${languages[lang].player} ${result.playerGlasses}`);
             return;
           } else {
             return start2();
@@ -168,7 +175,12 @@
           result.player -= playerNum;
 
           if (result.player <= 0) {
-            alert(languages[lang].botWon);
+            result.botGlasses++;
+            alert(`
+            ${languages[lang].botWon}
+            ${languages[lang].score}:
+              ${languages[lang].bot} ${result.botGlasses}
+              ${languages[lang].player} ${result.playerGlasses}`);
             const isContinue = confirm(languages[lang].isContinue);
             if (isContinue) {
               result.player = 5;
@@ -186,7 +198,12 @@
           result.bot -= playerNum;
 
           if (result.bot <= 0) {
-            alert(languages[lang].youWon);
+            result.playerGlasses++;
+            alert(`
+            ${languages[lang].youWon}
+            ${languages[lang].score}:
+              ${languages[lang].bot} ${result.botGlasses}
+              ${languages[lang].player} ${result.playerGlasses}`);
             const isContinue = confirm(languages[lang].isContinue);
             if (isContinue) {
               result.player = 5;
@@ -218,7 +235,12 @@
           result.player -= botNum;
 
           if (result.player <= 0) {
-            alert(languages[lang].botWon);
+            result.botGlasses++;
+            alert(`
+            ${languages[lang].botWon}
+            ${languages[lang].score}:
+              ${languages[lang].bot} ${result.botGlasses}
+              ${languages[lang].player} ${result.playerGlasses}`);
             const isContinue = confirm(languages[lang].isContinue);
             if (isContinue) {
               result.player = 5;
@@ -236,7 +258,12 @@
           result.bot -= botNum;
 
           if (result.bot <= 0) {
-            alert(languages[lang].youWon);
+            result.playerGlasses++;
+            alert(`
+            ${languages[lang].youWon}
+            ${languages[lang].score}:
+              ${languages[lang].bot} ${result.botGlasses}
+              ${languages[lang].player} ${result.playerGlasses}`);
             const isContinue = confirm(languages[lang].isContinue);
             if (isContinue) {
               result.player = 5;
